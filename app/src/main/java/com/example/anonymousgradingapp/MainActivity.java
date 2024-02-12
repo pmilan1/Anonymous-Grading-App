@@ -2,13 +2,38 @@ package com.example.anonymousgradingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button signupButton;
+    private Button forgotPasswordButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        signupButton = findViewById(R.id.registerButton);
+        forgotPasswordButton = findViewById(R.id.forgotButton);
+
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {   // opens Registration page
+                Intent i = new Intent(getApplicationContext(), RegisterationActivity.class);
+                startActivity(i);
+            }
+        });
+
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }
