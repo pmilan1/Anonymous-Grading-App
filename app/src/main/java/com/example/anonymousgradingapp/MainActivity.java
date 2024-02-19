@@ -9,41 +9,13 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button signupButton;
-    private Button forgotPasswordButton;
-    private Button courseButton;
-
+    private Button testButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        signupButton = findViewById(R.id.registerButton);
-        forgotPasswordButton = findViewById(R.id.forgotButton);
-        courseButton = findViewById(R.id.courseButton);
-
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {   // opens Registration page
-                Intent i = new Intent(getApplicationContext(), RegisterationActivity.class);
-                startActivity(i);
-            }
-        });
-
-        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
-                startActivity(i);
-            }
-        });
-
-        courseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), CourseActivity.class);
-                startActivity(i);
-            }
-        });
+        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(i);
     }
 }
