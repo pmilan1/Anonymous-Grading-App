@@ -5,20 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 
-public class CourseActivity extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
-    private ImageButton backCourseButton;
-
+    private Button registerButton;
+    private Button cancelButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course);
+        setContentView(R.layout.activity_registeration);
 
-        backCourseButton = findViewById(R.id.backCourseButton);
+        registerButton = findViewById(R.id.registerButton);
+        cancelButton = findViewById(R.id.cancelButton);
 
-        backCourseButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {    // go back to Sign-In screen if pressed
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);

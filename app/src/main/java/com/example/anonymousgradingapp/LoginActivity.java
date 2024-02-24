@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {   // opens Registration page
-                Intent i = new Intent(getApplicationContext(), RegisterationActivity.class);
+                Intent i = new Intent(getApplicationContext(), RegistrationActivity.class);
                 startActivity(i);
             }
         });

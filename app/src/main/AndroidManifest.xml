@@ -16,13 +16,10 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".CourseActivity"
-            android:exported="false" />
-        <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterationActivity"
+            android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
