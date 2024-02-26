@@ -24,7 +24,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent b = new Intent(getApplicationContext(), MainActivity.class);
+                Intent b = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(b);
             }
         });

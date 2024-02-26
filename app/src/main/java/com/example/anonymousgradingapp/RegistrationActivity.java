@@ -22,7 +22,7 @@ public class RegistrationActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {    // go back to Sign-In screen if pressed
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
             }
         });
