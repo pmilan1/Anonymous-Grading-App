@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<String> coursesList;
     private ArrayAdapter<String> adapter;
+    private Button buttonExams;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         EditText editTextCourseName = findViewById(R.id.addCourseEditText);
         Button buttonAddCourse = findViewById(R.id.addCourseButton);
+        buttonExams = findViewById(R.id.buttonExams);
 
         buttonAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     editTextCourseName.setText("");
                 }
+            }
+        });
+        buttonExams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ExamActivity.class);
+                startActivity(i);
             }
         });
     }
