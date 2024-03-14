@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<String> coursesList;
     private ArrayAdapter<String> adapter;
-    private Button buttonExams;
+    private Button buttonExams, barcodeMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         EditText editTextCourseName = findViewById(R.id.addCourseEditText);
         Button buttonAddCourse = findViewById(R.id.addCourseButton);
+        Button barcodeMap = findViewById(R.id.barcodeMapButton);
         buttonExams = findViewById(R.id.buttonExams);
 
         buttonAddCourse.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ExamActivity.class);
+                startActivity(i);
+            }
+        });
+        barcodeMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), BarcodeMap.class);
                 startActivity(i);
             }
         });
