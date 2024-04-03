@@ -16,8 +16,8 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registeration);
 
-        registerButton = findViewById(R.id.registerButton);
-        cancelButton = findViewById(R.id.cancelButton);
+        registerButton = (Button) findViewById(R.id.registerButton);
+        cancelButton = (Button) findViewById(R.id.cancelButton);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {    // go back to Sign-In screen if pressed
             @Override

@@ -18,8 +18,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
-        backIcon = findViewById(R.id.backIcon);
-        submitButton = findViewById(R.id.submitButton);
+        backIcon = (ImageButton) findViewById(R.id.backIcon);
+        submitButton = (Button) findViewById(R.id.submitButton);
 
         backIcon.setOnClickListener(new View.OnClickListener() {
             @Override

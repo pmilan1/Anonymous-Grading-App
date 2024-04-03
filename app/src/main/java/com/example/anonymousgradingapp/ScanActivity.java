@@ -25,7 +25,7 @@ public class ScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        examsButton = findViewById(R.id.examsButton);
+        examsButton = (Button) findViewById(R.id.examsButton);
         buttonPicture = (Button) findViewById(R.id.buttonPicture);
         imageView = (ImageView) findViewById(R.id.imageView);
 
