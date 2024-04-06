@@ -1,8 +1,6 @@
 package com.example.anonymousgradingapp;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,17 +8,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class BarcodeActivity extends AppCompatActivity {
+public class BarcodeScanningActivity extends AppCompatActivity {
 
-
-    private Button buttonPrint;
-    private Spinner spinnerExams;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barcode);
-
-        buttonPrint = (Button) findViewById(R.id.buttonPrint);
-        spinnerExams = (Spinner) findViewById(R.id.spinnerExams);
+        setContentView(R.layout.activity_barcode_scanning);
     }
 }

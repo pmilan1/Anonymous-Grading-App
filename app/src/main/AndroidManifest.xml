@@ -13,6 +13,9 @@
         android:theme="@style/Theme.AnonymousGradingApp"
         tools:targetApi="31">
         <activity
+            android:name=".BarcodeScanningActivity"
+            android:exported="false" />
+        <activity
             android:name=".BarcodeListItem"
             android:exported="false" />
         <activity
