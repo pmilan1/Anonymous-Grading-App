@@ -15,9 +15,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<String> coursesList;
+    public List<String> coursesList;
     private ArrayAdapter<String> adapter;
-    private Button buttonExams, barcodeMap;
+    private Button buttonExams, barcodeMap, addCourse;
+    private EditText courseName;
+    private Spinner spinnerCourses;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,22 +28,22 @@ public class MainActivity extends AppCompatActivity {
         coursesList = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, coursesList);
 
-        Spinner spinnerCourses = findViewById(R.id.courseSpinner);
+        spinnerCourses = (Spinner) findViewById(R.id.courseSpinner);
         spinnerCourses.setAdapter(adapter);
 
-        EditText editTextCourseName = findViewById(R.id.addCourseEditText);
-        Button buttonAddCourse = findViewById(R.id.addCourseButton);
-        Button barcodeMap = findViewById(R.id.barcodeMapButton);
+        courseName = (EditText) findViewById(R.id.courseNameEditText);
+        addCourse = (Button) findViewById(R.id.addCourseButton);
+        barcodeMap = (Button) findViewById(R.id.barcodeMapButton);
         buttonExams = findViewById(R.id.buttonExams);
 
-        buttonAddCourse.setOnClickListener(new View.OnClickListener() {
+        addCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String courseName = editTextCourseName.getText().toString();
-                if (!courseName.isEmpty()) {
-                    coursesList.add(courseName);
+                String courseName_ = courseName.getText().toString();
+                if (!courseName_.isEmpty()) {
+                    coursesList.add(courseName_);
                     adapter.notifyDataSetChanged();
-                    editTextCourseName.setText("");
+                    courseName.setText("");
                 }
             }
         });
