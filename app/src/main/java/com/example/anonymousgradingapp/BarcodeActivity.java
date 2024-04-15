@@ -17,7 +17,7 @@ public class BarcodeActivity extends AppCompatActivity {
 
 
     private ArrayAdapter<String> adapter;
-    private Button buttonPrint, buttonExams, buttonScan;
+    private Button buttonPrint, buttonExams, buttonScan, generateBarcodeBtn;
     private Spinner spinnerExams;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,7 @@ public class BarcodeActivity extends AppCompatActivity {
         spinnerExams = (Spinner) findViewById(R.id.spinnerExams);
         buttonScan = (Button) findViewById(R.id.buttonScan);
         buttonExams = (Button) findViewById(R.id.examsButton);
+        generateBarcodeBtn = (Button) findViewById(R.id.generateBarcodeBtn);
 
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +41,13 @@ public class BarcodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ExamActivity.class);
+                startActivity(i);
+            }
+        });
+        generateBarcodeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), BarcodeGenerator.class);
                 startActivity(i);
             }
         });

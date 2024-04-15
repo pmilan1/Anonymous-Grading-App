@@ -36,7 +36,7 @@ public class ExamActivity extends AppCompatActivity {
         //coursesList = MainActivity.coursesList;
 
         courses.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
 
         buttonBarcodes.setOnClickListener(new View.OnClickListener() {
             @Override
