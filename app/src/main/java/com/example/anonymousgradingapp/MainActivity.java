@@ -61,9 +61,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        /*
         private void loadSpinnerData() {
             DatabaseManager db = new DatabaseManager(getApplicationContext());
 
         }
+         */
     }
 }

@@ -26,6 +26,8 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.EnumMap;
 import java.util.Map;
 
+/* This file is exclusively for testing purposes. DELETE once fully implemented */
+
 public class BarcodeGenerator extends AppCompatActivity {
 
     private ImageView barcodeImageView;
@@ -37,7 +39,11 @@ public class BarcodeGenerator extends AppCompatActivity {
 
         barcodeImageView = findViewById(R.id.barcodeImageView);
 
-        generateBarcode("MilanParmar");
+        RandomNumberGenerator generator = new RandomNumberGenerator(1, 1000000);
+
+        int randomNumber = generator.next();
+
+        generateBarcode(Integer.toString(randomNumber));
     }
 
     private void generateBarcode(String data) {
