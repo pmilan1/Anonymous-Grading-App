@@ -16,59 +16,49 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.Code128Writer;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class BarcodeGenerator extends AppCompatActivity {
 
-    private EditText et;
-    private Button bt;
-    private ImageView img;
+    private ImageView barcodeImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_generator);
 
-        et = findViewById(R.id.et1);
-        bt = findViewById(R.id.btn1);
-        img = findViewById(R.id.img1);
+        barcodeImageView = findViewById(R.id.barcodeImageView);
 
-        bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                genBarcode();
-            }
-        });
+        generateBarcode("MilanParmar");
     }
 
-    private void genBarcode() {
-        String inputValue = et.getText().toString().trim(); // get input value from EditText
+    private void generateBarcode(String data) {
+        Code128Writer writer = new Code128Writer();
+        Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+        hints.put(EncodeHintType.MARGIN, 2);
 
-        if (!inputValue.isEmpty()) {
-            MultiFormatWriter mwriter = new MultiFormatWriter();    // encore the input value
+        try {
+            BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.CODE_128, 512, 512, hints);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
 
-            try {
-                BitMatrix matrix = mwriter.encode(inputValue, BarcodeFormat.CODE_128, img.getWidth(), img.getHeight()); // generate barcode matrix
-                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                Bitmap bitmap = barcodeEncoder.createBitmap(matrix); // creating bitmap to represent barcode
-
-                // Iterate through matrix and set pixels in bitmap
-                for (int i = 0; i < img.getWidth(); i++) {
-                    for (int j = 0; j < img.getHeight(); j++) {
-                        bitmap.setPixel(i, j, matrix.get(i, j) ? Color.BLACK : Color.WHITE);
-                    }
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? getResources().getColor(R.color.black) : getResources().getColor(R.color.white));
                 }
-                img.setImageBitmap(bitmap); // setting bitmap as the image resource of ImageView
-
-            } catch (Exception e) {
-                Toast.makeText(this, "Exception " + e, Toast.LENGTH_SHORT).show();
             }
-        }
-        else {
-            et.setError("Please enter a value");    // show error message if EditText is empty
+            barcodeImageView.setImageBitmap(bmp);
+        } catch (WriterException e) {
+            e.printStackTrace();
         }
     }
 }
