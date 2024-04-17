@@ -35,6 +35,7 @@ public class ExamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
+
         coursesButton = (Button) findViewById(R.id.coursesButton);
         buttonCreateExam = (Button) findViewById(R.id.buttonCreateExam);
         buttonBarcodes = (Button) findViewById(R.id.buttonBarcodes);
@@ -105,5 +106,4 @@ public class ExamActivity extends AppCompatActivity {
             adapter.addAll(coursesList);
         }
     }
-
 }

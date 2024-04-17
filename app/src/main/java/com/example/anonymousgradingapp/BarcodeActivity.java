@@ -39,6 +39,10 @@ public class BarcodeActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(MainActivity.PREF_NAME, MODE_PRIVATE);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
 
+        spinnerExams.setAdapter(adapter);
+
+        loadExamsToSpinner();
+
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
