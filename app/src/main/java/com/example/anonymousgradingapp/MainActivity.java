@@ -20,8 +20,8 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String PREF_NAME = "MyPrefs";
-    private static final String COURSES_KEY = "courses";
+    public static final String PREF_NAME = "MyPrefs";
+    public static final String COURSES_KEY = "courses";
 
     public List<String> coursesList;
     private ArrayAdapter<String> adapter;
