@@ -14,14 +14,18 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ExamActivity extends AppCompatActivity {
 
+    public static final String EXAM_KEY = "exams";
+
     private List<String> coursesList;
     public List<String> examsList;
     private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> examAdapter;
     private Button coursesButton, buttonCreateExam, buttonBarcodes;
     private EditText examName;
     private Spinner courses;
@@ -36,12 +40,13 @@ public class ExamActivity extends AppCompatActivity {
         buttonBarcodes = (Button) findViewById(R.id.buttonBarcodes);
         examName = (EditText) findViewById(R.id.editTextExamName);
         courses = (Spinner) findViewById(R.id.spinnerCourses);
-        examsList = new ArrayList<>();
 
         sharedPreferences = getSharedPreferences(MainActivity.PREF_NAME, MODE_PRIVATE);
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        examAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, examsList);
 
+        examsList = new ArrayList<>();
         courses.setAdapter(adapter);
 
         loadCoursesIntoSpinner();   // load courses into spinner
@@ -81,7 +86,13 @@ public class ExamActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    private void saveExamsToSharedPreferences() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> set = new HashSet<>(examsList);
+        editor.putStringSet(EXAM_KEY, set);
+        editor.apply();
     }
 
     private void loadCoursesIntoSpinner() {
