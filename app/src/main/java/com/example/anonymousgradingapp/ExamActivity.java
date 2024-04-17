@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class ExamActivity extends AppCompatActivity {
         buttonBarcodes = (Button) findViewById(R.id.buttonBarcodes);
         examName = (EditText) findViewById(R.id.editTextExamName);
         courses = (Spinner) findViewById(R.id.spinnerCourses);
+        examsList = new ArrayList<>();
 
         sharedPreferences = getSharedPreferences(MainActivity.PREF_NAME, MODE_PRIVATE);
 
@@ -57,17 +60,28 @@ public class ExamActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        buttonCreateExam.setOnClickListener(new View.OnClickListener() {
+        courses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                String exam = examName.getText().toString();
-                if (!exam.isEmpty()) {
-                    examsList.add(exam);
-                    examName.setText("");
-                }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                buttonCreateExam.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String exam = examName.getText().toString();
+                        if (!exam.isEmpty()) {
+                            examsList.add(exam + " ( " + parent.getItemAtPosition(position).toString() + ")");
+                            examName.setText("");
+                            Toast.makeText(ExamActivity.this, "Added exam: " + exam, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+
     }
 
     private void loadCoursesIntoSpinner() {
