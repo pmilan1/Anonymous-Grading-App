@@ -75,6 +75,8 @@ public class ExamActivity extends AppCompatActivity {
                         if (!exam.isEmpty()) {
                             examsList.add(exam + " ( " + parent.getItemAtPosition(position).toString() + ")");
                             examName.setText("");
+                            examAdapter.notifyDataSetChanged();
+                            saveExamsToSharedPreferences();
                             Toast.makeText(ExamActivity.this, "Added exam: " + exam, Toast.LENGTH_LONG).show();
                         }
                     }
