@@ -12,14 +12,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ExamActivity extends AppCompatActivity {
 
+    public static final String EXAM_KEY = "exams";
+
     private List<String> coursesList;
     public List<String> examsList;
     private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> examAdapter;
     private Button coursesButton, buttonCreateExam, buttonBarcodes;
     private EditText examName;
     private Spinner courses;
@@ -29,6 +33,7 @@ public class ExamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
+
         coursesButton = (Button) findViewById(R.id.coursesButton);
         buttonCreateExam = (Button) findViewById(R.id.buttonCreateExam);
         buttonBarcodes = (Button) findViewById(R.id.buttonBarcodes);
@@ -38,7 +43,9 @@ public class ExamActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(MainActivity.PREF_NAME, MODE_PRIVATE);
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        examAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, examsList);
 
+        examsList = new ArrayList<>();
         courses.setAdapter(adapter);
 
         loadCoursesIntoSpinner();   // load courses into spinner
@@ -62,12 +69,22 @@ public class ExamActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String exam = examName.getText().toString();
+
                 if (!exam.isEmpty()) {
                     examsList.add(exam);
+                    examAdapter.notifyDataSetChanged();
                     examName.setText("");
+                    saveExamsToSharedPreferences();
                 }
             }
         });
+    }
+
+    private void saveExamsToSharedPreferences() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> set = new HashSet<>(examsList);
+        editor.putStringSet(EXAM_KEY, set);
+        editor.apply();
     }
 
     private void loadCoursesIntoSpinner() {

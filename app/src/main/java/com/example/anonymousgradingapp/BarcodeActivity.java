@@ -1,6 +1,7 @@
 package com.example.anonymousgradingapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,12 +14,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 public class BarcodeActivity extends AppCompatActivity {
 
 
     private ArrayAdapter<String> adapter;
     private Button buttonPrint, buttonExams, buttonScan, generateBarcodeBtn;
     private Spinner spinnerExams;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +35,9 @@ public class BarcodeActivity extends AppCompatActivity {
         buttonScan = (Button) findViewById(R.id.buttonScan);
         buttonExams = (Button) findViewById(R.id.examsButton);
         generateBarcodeBtn = (Button) findViewById(R.id.generateBarcodeBtn);
+
+        sharedPreferences = getSharedPreferences(MainActivity.PREF_NAME, MODE_PRIVATE);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
 
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,5 +60,14 @@ public class BarcodeActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    private void loadExamsToSpinner() {
+        Set<String> set = sharedPreferences.getStringSet(ExamActivity.EXAM_KEY, null);
+
+        if (set != null) {
+            List<String> examsList = new ArrayList<>(set);
+            adapter.addAll(examsList);
+        }
     }
 }
