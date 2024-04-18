@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     public List<String> coursesList;
     private ArrayAdapter<String> adapter;
-    private Button buttonExams, barcodeMap, addCourse;
+    private Button buttonExams, barcodeMap, addCourse, uploadBtn;
     private EditText courseName;
     private Spinner spinnerCourses;
 
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         addCourse = (Button) findViewById(R.id.addCourseButton);
         barcodeMap = (Button) findViewById(R.id.barcodeMapButton);
         buttonExams = findViewById(R.id.buttonExams);
+        uploadBtn = findViewById(R.id.uploadButton);
 
         addCourse.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
@@ -79,12 +80,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        private void loadSpinnerData() {
-            DatabaseManager db = new DatabaseManager(getApplicationContext());
+        uploadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        }
-         */
+            }
+        });
     }
 
     private void saveCoursesToSharedPreferences() {
