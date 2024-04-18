@@ -93,8 +93,9 @@ public class ExamActivity extends AppCompatActivity {
 
     private void saveExamsToSharedPreferences() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        Set<String> set = new HashSet<>(examsList);
-        editor.putStringSet(EXAM_KEY, set);
+        Set<String> existingExams = sharedPreferences.getStringSet(EXAM_KEY, new HashSet<>());
+        existingExams.addAll(examsList);
+        editor.putStringSet(EXAM_KEY, existingExams);
         editor.apply();
     }
 
