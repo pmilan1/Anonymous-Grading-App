@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
             requestForStoragePermissions();
         }
 
-
         addCourse.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
             @Override
@@ -109,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         spinnerCourses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -127,19 +125,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
-
-        /*
-        private void loadSpinnerData() {
-            DatabaseManager db = new DatabaseManager(getApplicationContext());
-
-        }
-         */
     }
 
     private void saveCoursesToSharedPreferences() {
@@ -182,9 +172,8 @@ public class MainActivity extends AppCompatActivity {
                 storageActivityResultLauncher.launch(intent);
             }
         }
-
     }
-    private ActivityResultLauncher<Intent> storageActivityResultLauncher =
+    private final ActivityResultLauncher<Intent> storageActivityResultLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     new ActivityResultCallback<ActivityResult>(){
 
@@ -195,7 +184,8 @@ public class MainActivity extends AppCompatActivity {
                                 if(Environment.isExternalStorageManager()){
                                     //Manage External Storage Permissions Granted
                                     //Log.d(TAG, "onActivityResult: Manage External Storage Permissions Granted");
-                                }else{
+                                }
+                                else{
                                     Toast.makeText(MainActivity.this, "Storage Permissions Denied", Toast.LENGTH_SHORT).show();
                                 }
                             }else{
@@ -229,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
                 if(uri != null){
                     getCSVFromUri(uri); //Calls function to read the csv
                 }
-
             }
         }
     }
@@ -250,6 +239,5 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "CSV file read error", Toast.LENGTH_LONG).show();
         }
-
     }
 }
