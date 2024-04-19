@@ -72,7 +72,11 @@ public class MainActivity extends AppCompatActivity {
         barcodeMap = (Button) findViewById(R.id.barcodeMapButton);
         buttonExams = (Button) findViewById(R.id.buttonExams);
         buttonUpload = (Button) findViewById(R.id.uploadButton);
-        requestForStoragePermissions();
+
+        //Check for storage permission
+        if(!checkStoragePermissions()) {
+            requestForStoragePermissions();
+        }
 
 
         addCourse.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +117,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         openFile();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        Set<String> set = new HashSet<>(rosterList);
+                        editor.putStringSet(parent.getItemAtPosition(position).toString(), set);
+                        editor.apply();
+                        //Adds a new list to SharedPreferences with the course name
+                        rosterList.clear();
+                        Toast.makeText(MainActivity.this, "CSV file read successful!", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -146,8 +157,16 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         }
     }
+    //Stuff for storage permission
     private static final int STORAGE_PERMISSION_CODE = 23;
-
+    public boolean checkStoragePermissions(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            //Android is 11 (R) or above
+            return Environment.isExternalStorageManager();
+        }else {
+            return false;
+        }
+    }
     private void requestForStoragePermissions() {
         //Android is 11 (R) or above
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
@@ -185,13 +204,21 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
+    //End stuff for storage permission
+
+    //Use built-in file explorer to find a CSV file
     private void openFile(){
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/csv"); //MIME type for csv file
+        String[] mimeTypes = {"text/csv", "text/comma-separated-values", "application/csv"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+
         startActivityForResult(intent, PICK_CSV_FILE);
     }
 
+
+    //Get file location from address provided in intent
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -200,12 +227,13 @@ public class MainActivity extends AppCompatActivity {
             if(data != null){
                 uri = data.getData(); //Gets file location from intent
                 if(uri != null){
-                    getCSVFromUri(uri); //Read the csv
+                    getCSVFromUri(uri); //Calls function to read the csv
                 }
 
             }
         }
     }
+    //Reads CSV
     private void getCSVFromUri(Uri uri){
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);

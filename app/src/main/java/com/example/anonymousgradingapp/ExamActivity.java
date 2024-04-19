@@ -74,7 +74,7 @@ public class ExamActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         String exam = examName.getText().toString();
                         if (!exam.isEmpty()) {
-                            examsList.add(exam + " ( " + parent.getItemAtPosition(position).toString() + ")");
+                            examsList.add(exam + " (" + parent.getItemAtPosition(position).toString() + ")");
                             examName.setText("");
                             examAdapter.notifyDataSetChanged();
                             saveExamsToSharedPreferences();
