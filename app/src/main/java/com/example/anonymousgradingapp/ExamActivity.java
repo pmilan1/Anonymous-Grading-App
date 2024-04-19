@@ -16,13 +16,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public class ExamActivity extends AppCompatActivity {
 
     public static final String EXAM_KEY = "exams";
 
-    private List<String> coursesList;
+    private List<String> randomNums;
     public List<String> examsList;
     private ArrayAdapter<String> adapter;
     private ArrayAdapter<String> examAdapter;
@@ -41,6 +42,7 @@ public class ExamActivity extends AppCompatActivity {
         buttonBarcodes = (Button) findViewById(R.id.buttonBarcodes);
         examName = (EditText) findViewById(R.id.editTextExamName);
         courses = (Spinner) findViewById(R.id.spinnerCourses);
+        randomNums = new ArrayList<>();
 
         sharedPreferences = getSharedPreferences(MainActivity.PREF_NAME, MODE_PRIVATE);
 
@@ -79,6 +81,15 @@ public class ExamActivity extends AppCompatActivity {
                             examAdapter.notifyDataSetChanged();
                             saveExamsToSharedPreferences();
                             Toast.makeText(ExamActivity.this, "Added exam: " + exam, Toast.LENGTH_LONG).show();
+                            Set<String> set = sharedPreferences.getStringSet(parent.getItemAtPosition(position).toString(), null);
+                            if(set != null){
+                                List<String> roster = new ArrayList<>(set);
+                                randomNums(roster.size());
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                Set<String> examNums = new HashSet<>(randomNums);
+                                editor.putStringSet(exam + " (" + parent.getItemAtPosition(position).toString() + ")", examNums);
+                                editor.apply();
+                            }
                         }
                     }
                 });
@@ -90,7 +101,17 @@ public class ExamActivity extends AppCompatActivity {
             }
         });
     }
-
+    private void randomNums(int classSize){
+        int counter = classSize;
+        int max = 99999999;
+        int min = 10000000;
+        Random random = new Random();
+        while(counter < 0){
+            Integer rand = random.nextInt(max - min + 1) + min;
+            randomNums.add(rand.toString());
+            counter--;
+        }
+    }
     private void saveExamsToSharedPreferences() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Set<String> existingExams = sharedPreferences.getStringSet(EXAM_KEY, new HashSet<>());
