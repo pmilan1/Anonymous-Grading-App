@@ -115,13 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         openFile();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        Set<String> set = new HashSet<>(rosterList);
-                        editor.putStringSet(parent.getItemAtPosition(position).toString(), set);
-                        editor.apply();
-                        //Adds a new list to SharedPreferences with the course name
-                        rosterList.clear();
-                        Toast.makeText(MainActivity.this, "CSV file read successful!", Toast.LENGTH_LONG).show();
+                        saveRosterListToSharedPreferences(parent.getItemAtPosition(position).toString());
                     }
                 });
             }
@@ -146,6 +140,14 @@ public class MainActivity extends AppCompatActivity {
             coursesList.addAll(set);
             adapter.notifyDataSetChanged();
         }
+    }
+    private void saveRosterListToSharedPreferences(String name){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> set = new HashSet<>(rosterList);
+        editor.putStringSet(name, set);
+        editor.apply();
+        //Adds a new list to SharedPreferences with the course name
+        rosterList.clear();
     }
     //Stuff for storage permission
     private static final int STORAGE_PERMISSION_CODE = 23;
@@ -234,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                     rosterList.add(line);
                 }
                 inputStream.close();
+                Toast.makeText(MainActivity.this, "CSV file read successful!", Toast.LENGTH_LONG).show();
             }
         }catch (IOException e){
             e.printStackTrace();
