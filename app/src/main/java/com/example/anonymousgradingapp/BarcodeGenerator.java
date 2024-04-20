@@ -1,5 +1,8 @@
 package com.example.anonymousgradingapp;
 
+import static com.example.anonymousgradingapp.MainActivity.spinnerSelection;
+
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,30 +29,64 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 /* This file is exclusively for testing purposes. DELETE once fully implemented */
 
 public class BarcodeGenerator extends AppCompatActivity {
 
-    private ImageView barcodeImageView;
+    private TableLayout tableLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_generator);
 
-        barcodeImageView = findViewById(R.id.barcodeImageView);
+        tableLayout = findViewById(R.id.barcodeTableLayout);
 
-        RandomNumberGenerator generator = new RandomNumberGenerator(1, 1000000);    // testing
+        // Retrieve class names from SharedPreferences
+        List<String> classNames = getClassNamesFromSharedPreferences();
 
-        int randomNumber = generator.next();
+        // Generate and display barcode for each class name
+        if (classNames != null && !classNames.isEmpty()) {
+            for (String className : classNames) {
+                TableRow tableRow = new TableRow(this);
 
-        generateBarcode(Integer.toString(randomNumber));
+                // Create TextView to display class name
+                TextView classNameTextView = new TextView(this);
+                classNameTextView.setText(className);
+                classNameTextView.setPadding(16, 8, 16, 8);
+                tableRow.addView(classNameTextView);
+
+                // Generate and display barcode image
+                String randomNum = Integer.toString(generateRandomNumber());
+                ImageView barcodeImageView = new ImageView(this);
+                Bitmap barcodeBitmap = generateBarcode(randomNum);
+                barcodeImageView.setImageBitmap(barcodeBitmap);
+                barcodeImageView.setPadding(6,8,6,8);
+                tableRow.addView(barcodeImageView);
+
+                tableLayout.addView(tableRow);
+            }
+        }
     }
 
-    private void generateBarcode(String data) {
+    private List<String> getClassNamesFromSharedPreferences() {
+        // Retrieve class names from SharedPreferences, modify as per your implementation
+        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
+        Set<String> classNamesSet = sharedPreferences.getStringSet("student_names_" + spinnerSelection, null);
+        if (classNamesSet != null) {
+            return new ArrayList<>(classNamesSet);
+        }
+        return null;
+    }
+
+    private Bitmap generateBarcode(String data) {
         Code128Writer writer = new Code128Writer();
         Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
         hints.put(EncodeHintType.MARGIN, 2);
@@ -62,9 +102,14 @@ public class BarcodeGenerator extends AppCompatActivity {
                     bmp.setPixel(x, y, bitMatrix.get(x, y) ? getResources().getColor(R.color.black) : getResources().getColor(R.color.white));
                 }
             }
-            barcodeImageView.setImageBitmap(bmp);
+            return bmp;
         } catch (WriterException e) {
             e.printStackTrace();
+            return null;
         }
+    }
+    private int generateRandomNumber() {
+        Random random = new Random();
+        return random.nextInt(99999999 - 10000000 + 1) + 10000000;
     }
 }

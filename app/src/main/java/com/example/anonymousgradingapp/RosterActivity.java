@@ -1,16 +1,21 @@
 package com.example.anonymousgradingapp;
 
+import static com.example.anonymousgradingapp.MainActivity.spinnerSelection;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class RosterActivity extends AppCompatActivity {
 
@@ -20,28 +25,41 @@ public class RosterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_roster);
 
         SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        String csvContent = sharedPreferences.getString("csv_content", "");
+        String courseName = getIntent().getStringExtra("courseName");
 
-        List<String> rows = Arrays.asList(csvContent.split("\n"));
+        List<String> studentNames = getListFromSharedPreferences("student_names_" + spinnerSelection);
+        List<String> studentIds = getListFromSharedPreferences("student_ids_" + spinnerSelection);
 
-        TableLayout tableLayout = findViewById(R.id.tableLayout);
+        if (studentNames != null && studentIds != null && studentNames.size() == studentIds.size()) {
+            TableLayout tableLayout = findViewById(R.id.tableLayout);
 
-        for (String row : rows) {
-            String[] columns = row.split(",");
+            for (int i = 0; i < studentNames.size(); i++) {
+                TableRow tableRow = new TableRow(this);
 
-            if (columns.length != 2) {
-                continue;
+                TextView nameTextView = new TextView(this);
+                nameTextView.setText(studentNames.get(i));
+                nameTextView.setPadding(16, 8, 16, 8);
+                tableRow.addView(nameTextView);
+
+                TextView idTextView = new TextView(this);
+                idTextView.setText(studentIds.get(i));
+                idTextView.setPadding(16, 8, 16, 8);
+                tableRow.addView(idTextView);
+
+                tableLayout.addView(tableRow);
             }
-
-            TableRow tableRow = new TableRow(this); // create new row
-
-            for (String column : columns) {
-                TextView textView = new TextView(this);
-                textView.setText(column);
-                textView.setPadding(16, 8, 16, 8);
-                tableRow.addView(textView);
-            }
-            tableLayout.addView(tableRow);
         }
+        else {
+            Toast.makeText(this, "No student data found for this course", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private List<String> getListFromSharedPreferences(String key) {
+        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
+        Set<String> set = sharedPreferences.getStringSet(key, null);
+        if (set != null) {
+            return new ArrayList<>(set);
+        }
+        return null;
     }
 }

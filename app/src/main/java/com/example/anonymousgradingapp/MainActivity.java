@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 101;
 
     public List<String> coursesList, rosterList;
+    public static String spinnerSelection;
     private ArrayAdapter<String> adapter;
     private Button buttonExams, rosterBtn, addCourse, buttonUpload;
     private EditText courseName;
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         openFile();
+                        spinnerSelection = parent.getItemAtPosition(position).toString();
                         saveRosterListToSharedPreferences(parent.getItemAtPosition(position).toString());
                     }
                 });
@@ -255,9 +257,40 @@ public class MainActivity extends AppCompatActivity {
     private void saveToSharedPreferences(String csvContent) {
         SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("csv_content", csvContent);
-        editor.apply();
+
+        String[] lines = csvContent.split("\n");
+
+        // Initialize lists to store student names and IDs
+        List<String> studentNames = new ArrayList<>();
+        List<String> studentIDs = new ArrayList<>();
+
+        // Parse each line to extract student names and IDs
+        for (String line : lines) {
+            String[] parts = line.split(",");   // assuming comma-separation in CSV
+
+            if (parts.length >= 2) {
+                studentNames.add(parts[0].trim());
+                studentIDs.add(parts[1].trim());
+            }
+        }
+
+
+        // save student names and ids to SharedPreferences
+        saveListToSharedPreferences("student_names_" + spinnerSelection, studentNames);
+        saveListToSharedPreferences("student_ids_" + spinnerSelection, studentIDs);
+
+        //editor.putString("csv_content", csvContent);
+        //editor.apply();
 
         Toast.makeText(this, "CSV content saved to SharedPreferences", Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveListToSharedPreferences(String key, List<String> list) {
+        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Set<String> set = new HashSet<>(list);
+        editor.putStringSet(key, set);
+        editor.apply();
     }
 }
