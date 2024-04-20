@@ -39,7 +39,7 @@ public class BarcodeGenerator extends AppCompatActivity {
 
         barcodeImageView = findViewById(R.id.barcodeImageView);
 
-        RandomNumberGenerator generator = new RandomNumberGenerator(1, 1000000);
+        RandomNumberGenerator generator = new RandomNumberGenerator(1, 1000000);    // testing
 
         int randomNumber = generator.next();
 

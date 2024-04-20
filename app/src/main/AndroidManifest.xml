@@ -33,7 +33,7 @@
             android:name=".BarcodeListItem"
             android:exported="false" />
         <activity
-            android:name=".BarcodeMap"
+            android:name=".RosterActivity"
             android:exported="false" />
         <activity
             android:name=".ScanActivity"

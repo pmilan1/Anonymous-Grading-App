@@ -130,10 +130,10 @@
         app:layout_constraintVertical_bias="0.023" />
 
     <Button
-        android:id="@+id/barcodeMapButton"
+        android:id="@+id/rosterBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Barcode Map"
+        android:text="Class Roster"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"

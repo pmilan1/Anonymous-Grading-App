@@ -7,20 +7,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,7 +25,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
-import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String PREF_NAME = "MyPrefs";
     public static final String COURSES_KEY = "courses";
     private static final int PICK_CSV_FILE = 1;
+    private static final int REQUEST_CODE = 101;
 
     public List<String> coursesList, rosterList;
     private ArrayAdapter<String> adapter;
-    private Button buttonExams, barcodeMap, addCourse, buttonUpload;
+    private Button buttonExams, rosterBtn, addCourse, buttonUpload;
     private EditText courseName;
     private Spinner spinnerCourses;
 
@@ -69,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         courseName = (EditText) findViewById(R.id.courseNameEditText);
         addCourse = (Button) findViewById(R.id.addCourseButton);
-        barcodeMap = (Button) findViewById(R.id.barcodeMapButton);
+        rosterBtn = (Button) findViewById(R.id.rosterBtn);
         buttonExams = (Button) findViewById(R.id.buttonExams);
         buttonUpload = (Button) findViewById(R.id.uploadButton);
 
@@ -100,10 +95,10 @@ public class MainActivity extends AppCompatActivity {
         });
         loadCoursesFromSharedPreferences();
 
-        barcodeMap.setOnClickListener(new View.OnClickListener() {
+        rosterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), BarcodeMap.class);
+                Intent i = new Intent(getApplicationContext(), RosterActivity.class);
                 startActivity(i);
             }
         });
@@ -202,11 +197,11 @@ public class MainActivity extends AppCompatActivity {
     private void openFile(){
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/csv"); //MIME type for csv file
+        intent.setType("text/csv");
         String[] mimeTypes = {"text/csv", "text/comma-separated-values", "application/csv"};
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
 
-        startActivityForResult(intent, PICK_CSV_FILE);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
 
@@ -214,33 +209,55 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_CSV_FILE && resultCode == Activity.RESULT_OK){
-            Uri uri = null;
-            if(data != null){
-                uri = data.getData(); //Gets file location from intent
-                if(uri != null){
-                    getCSVFromUri(uri); //Calls function to read the csv
+
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Uri csvUri = data.getData();
+
+                if (csvUri != null) {
+                    getCSVFromUri(csvUri); // read the CSV file and save contents to SharedPreferences
                 }
+                else {
+                    Toast.makeText(this, "Unable to retrieve CSV file", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else {
+                Toast.makeText(this, "No data recieved", Toast.LENGTH_SHORT).show();
             }
         }
     }
     //Reads CSV
-    private void getCSVFromUri(Uri uri){
+    private void getCSVFromUri(Uri csvUri){
         try {
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            if(inputStream != null){
+            InputStream inputStream = getContentResolver().openInputStream(csvUri);
+
+            if (inputStream != null) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
                 String line;
-                line = reader.readLine(); //Skips the header line
-                while ((line = reader.readLine()) != null){
-                    rosterList.add(line);
+
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line).append("\n");
                 }
                 inputStream.close();
-                Toast.makeText(MainActivity.this, "CSV file read successful!", Toast.LENGTH_LONG).show();
+
+                saveToSharedPreferences(stringBuilder.toString());
             }
-        }catch (IOException e){
+            else {
+                Toast.makeText(this, "Unable to open CSV file", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "CSV file read error", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error reading CSV file", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void saveToSharedPreferences(String csvContent) {
+        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("csv_content", csvContent);
+        editor.apply();
+
+        Toast.makeText(this, "CSV content saved to SharedPreferences", Toast.LENGTH_SHORT).show();
     }
 }
