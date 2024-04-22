@@ -17,7 +17,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class ScanActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button scanButton;
+    private Button scanButton, examsButton;
     private TextView barcodeId;
 
     @Override
@@ -26,6 +26,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_scan);
 
         scanButton = findViewById(R.id.scanButton);
+        examsButton = findViewById(R.id.examsButton);
         barcodeId = findViewById(R.id.barcodeIdtextView);
 
         scanButton.setOnClickListener(this);   // add listener to button
@@ -33,10 +34,17 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        IntentIntegrator intentIntegrator = new IntentIntegrator(this); // initialize scanner
-        intentIntegrator.setPrompt("Scan a barcode or QR Code");    // bottom text of scanner
-        intentIntegrator.setOrientationLocked(true);    // lock orientation to horizontal (default)
-        intentIntegrator.initiateScan();                // start scanning
+
+        if (v.getId() == R.id.scanButton) {
+            IntentIntegrator intentIntegrator = new IntentIntegrator(this); // initialize scanner
+            intentIntegrator.setPrompt("Scan a barcode or QR Code");    // bottom text of scanner
+            intentIntegrator.setOrientationLocked(true);    // lock orientation to horizontal (default)
+            intentIntegrator.initiateScan();                // start scanning
+        }
+        else if (v.getId() == R.id.examsButton) {
+            Intent i = new Intent(getApplicationContext(), ExamActivity.class);
+            startActivity(i);
+        }
     }
 
     @Override

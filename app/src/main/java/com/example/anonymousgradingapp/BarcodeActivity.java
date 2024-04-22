@@ -22,7 +22,7 @@ public class BarcodeActivity extends AppCompatActivity {
 
 
     private ArrayAdapter<String> adapter;
-    private Button buttonPrint, buttonExams, buttonScan, generateBarcodeBtn;
+    private Button buttonExams, buttonScan, generateBarcodeBtn;
     private Spinner spinnerExams;
     private SharedPreferences sharedPreferences;
     @Override
@@ -30,7 +30,6 @@ public class BarcodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode);
 
-        buttonPrint = (Button) findViewById(R.id.buttonPrint);
         spinnerExams = (Spinner) findViewById(R.id.spinnerExams);
         buttonScan = (Button) findViewById(R.id.buttonScan);
         buttonExams = (Button) findViewById(R.id.examsButton);

@@ -255,8 +255,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveToSharedPreferences(String csvContent) {
-        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
+        //SharedPreferences.Editor editor = sharedPreferences.edit();
 
         String[] lines = csvContent.split("\n");
 
@@ -276,11 +276,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         // save student names and ids to SharedPreferences
-        saveListToSharedPreferences("student_names_" + spinnerSelection, studentNames);
-        saveListToSharedPreferences("student_ids_" + spinnerSelection, studentIDs);
-
-        //editor.putString("csv_content", csvContent);
-        //editor.apply();
+        saveListToSharedPreferences("student_names_", studentNames);
+        saveListToSharedPreferences("student_ids_", studentIDs);
 
         Toast.makeText(this, "CSV content saved to SharedPreferences", Toast.LENGTH_SHORT).show();
     }

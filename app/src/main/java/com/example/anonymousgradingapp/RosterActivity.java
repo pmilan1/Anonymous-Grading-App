@@ -25,10 +25,10 @@ public class RosterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_roster);
 
         SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        String courseName = getIntent().getStringExtra("courseName");
+        //String courseName = getIntent().getStringExtra("courseName");
 
-        List<String> studentNames = getListFromSharedPreferences("student_names_" + spinnerSelection);
-        List<String> studentIds = getListFromSharedPreferences("student_ids_" + spinnerSelection);
+        List<String> studentNames = getListFromSharedPreferences("student_names_");
+        List<String> studentIds = getListFromSharedPreferences("student_ids_");
 
         if (studentNames != null && studentIds != null && studentNames.size() == studentIds.size()) {
             TableLayout tableLayout = findViewById(R.id.tableLayout);

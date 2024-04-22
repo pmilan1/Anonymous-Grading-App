@@ -79,7 +79,7 @@ public class BarcodeGenerator extends AppCompatActivity {
     private List<String> getClassNamesFromSharedPreferences() {
         // Retrieve class names from SharedPreferences, modify as per your implementation
         SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        Set<String> classNamesSet = sharedPreferences.getStringSet("student_names_" + spinnerSelection, null);
+        Set<String> classNamesSet = sharedPreferences.getStringSet("student_names_", null);
         if (classNamesSet != null) {
             return new ArrayList<>(classNamesSet);
         }
