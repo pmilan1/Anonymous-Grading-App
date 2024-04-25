@@ -30,6 +30,7 @@ public class BarcodeActivity extends AppCompatActivity {
     private Spinner spinnerExams;
     private SharedPreferences sharedPreferences;
     private String spinnerSelection;
+    private String courseName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +66,7 @@ public class BarcodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), BarcodeGenerator.class);
-                i.putExtra("courseName", spinnerSelection);
+                i.putExtra("courseName", courseName);
                 startActivity(i);
             }
         });
@@ -78,7 +79,7 @@ public class BarcodeActivity extends AppCompatActivity {
                     Log.d("SPINNER", spinnerSelection);
                 }
                 else {
-                    Log.e("SPINNER", "FUCCK");
+                    Log.e("SPINNER", "No selection.");
                 }
                 extractCourseName(spinnerSelection);
             }
@@ -96,7 +97,7 @@ public class BarcodeActivity extends AppCompatActivity {
         Matcher matcher = pattern.matcher(tiedName);
 
         if (matcher.find()) {
-            String courseName = matcher.group(1);   // extract content inside parenthesis
+            courseName = matcher.group(1);   // extract content inside parenthesis
             Log.d("SPINNER", "Extracted Course Name: " + courseName);
         }
         else {

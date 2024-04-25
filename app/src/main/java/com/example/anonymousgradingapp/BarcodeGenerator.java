@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +40,7 @@ import java.util.Set;
 public class BarcodeGenerator extends AppCompatActivity {
 
     private TableLayout tableLayout;
+    private String courseName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,9 @@ public class BarcodeGenerator extends AppCompatActivity {
 
         tableLayout = findViewById(R.id.barcodeTableLayout);
 
-        String courseName = getIntent().getStringExtra("courseName");
+        courseName = getIntent().getStringExtra("courseName");
+        Log.d("BARCODE", courseName);
+
 
         // Retrieve class names from SharedPreferences
         List<String> classNames = getClassNamesFromSharedPreferences(courseName);
