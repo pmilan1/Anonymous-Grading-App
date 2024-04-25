@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 101;
 
     public List<String> coursesList, rosterList;
-    public static String spinnerSelection;
+    private String spinnerSelection;
     private ArrayAdapter<String> adapter;
     private Button buttonExams, rosterBtn, addCourse, buttonUpload;
     private EditText courseName;
@@ -57,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 
         coursesList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, coursesList);
         rosterList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, coursesList);
 
         spinnerCourses = (Spinner) findViewById(R.id.courseSpinner);
         spinnerCourses.setAdapter(adapter);
@@ -75,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         addCourse.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
             @Override
             public void onClick(View v) {
                 String courseName_ = courseName.getText().toString();
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), RosterActivity.class);
+                i.putExtra("courseName", spinnerCourses.getSelectedItem().toString());
                 startActivity(i);
             }
         });
@@ -107,14 +108,16 @@ public class MainActivity extends AppCompatActivity {
         spinnerCourses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // upload button
                 buttonUpload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         openFile();
                         spinnerSelection = parent.getItemAtPosition(position).toString();
-                        saveRosterListToSharedPreferences(parent.getItemAtPosition(position).toString());
+                        saveRosterListToSharedPreferences(spinnerSelection);
                     }
                 });
+                loadRosterFromSharedPreferences(parent.getItemAtPosition(position).toString()); // load roster from selected course
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -243,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 inputStream.close();
 
-                saveToSharedPreferences(stringBuilder.toString());
+                saveToSharedPreferences(stringBuilder.toString(), spinnerSelection);
             }
             else {
                 Toast.makeText(this, "Unable to open CSV file", Toast.LENGTH_SHORT).show();
@@ -254,9 +257,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void saveToSharedPreferences(String csvContent) {
-        //SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        //SharedPreferences.Editor editor = sharedPreferences.edit();
+    private void saveToSharedPreferences(String csvContent, String courseName) {
+        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         String[] lines = csvContent.split("\n");
 
@@ -274,10 +277,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
         // save student names and ids to SharedPreferences
-        saveListToSharedPreferences("student_names_", studentNames);
-        saveListToSharedPreferences("student_ids_", studentIDs);
+        saveListToSharedPreferences(courseName + "_student_names", studentNames);
+        saveListToSharedPreferences(courseName + "_student_ids", studentIDs);
 
         Toast.makeText(this, "CSV content saved to SharedPreferences", Toast.LENGTH_SHORT).show();
     }
@@ -289,5 +291,15 @@ public class MainActivity extends AppCompatActivity {
         Set<String> set = new HashSet<>(list);
         editor.putStringSet(key, set);
         editor.apply();
+    }
+
+    private void loadRosterFromSharedPreferences(String courseName) {
+        SharedPreferences sharedPreferences1 = getSharedPreferences("RosterPref", MODE_PRIVATE);
+        Set<String> set = sharedPreferences1.getStringSet(courseName, null);
+
+        if (set != null) {
+            rosterList.clear();     // clear existing roster
+            rosterList.addAll(set); // load roster for selected course
+        }
     }
 }

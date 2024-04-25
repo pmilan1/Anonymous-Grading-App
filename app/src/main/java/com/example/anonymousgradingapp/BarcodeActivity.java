@@ -3,7 +3,9 @@ package com.example.anonymousgradingapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -17,6 +19,8 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BarcodeActivity extends AppCompatActivity {
 
@@ -25,6 +29,7 @@ public class BarcodeActivity extends AppCompatActivity {
     private Button buttonExams, buttonScan, generateBarcodeBtn;
     private Spinner spinnerExams;
     private SharedPreferences sharedPreferences;
+    private String spinnerSelection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +65,43 @@ public class BarcodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), BarcodeGenerator.class);
+                i.putExtra("courseName", spinnerSelection);
                 startActivity(i);
             }
         });
+        spinnerExams.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerSelection = parent.getItemAtPosition(position).toString();
+
+                if (spinnerSelection != null) {
+                    Log.d("SPINNER", spinnerSelection);
+                }
+                else {
+                    Log.e("SPINNER", "FUCCK");
+                }
+                extractCourseName(spinnerSelection);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void extractCourseName(String tiedName) {
+        String patternString = "\\((.*?)\\)";   // regular expression to find content inside parenthesis
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(tiedName);
+
+        if (matcher.find()) {
+            String courseName = matcher.group(1);   // extract content inside parenthesis
+            Log.d("SPINNER", "Extracted Course Name: " + courseName);
+        }
+        else {
+            Log.e("SPINNER", "No content found inside parenthesis");
+        }
     }
 
     private void loadExamsToSpinner() {

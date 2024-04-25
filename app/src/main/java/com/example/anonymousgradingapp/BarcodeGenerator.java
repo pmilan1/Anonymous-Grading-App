@@ -1,7 +1,5 @@
 package com.example.anonymousgradingapp;
 
-import static com.example.anonymousgradingapp.MainActivity.spinnerSelection;
-
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -49,8 +47,10 @@ public class BarcodeGenerator extends AppCompatActivity {
 
         tableLayout = findViewById(R.id.barcodeTableLayout);
 
+        String courseName = getIntent().getStringExtra("courseName");
+
         // Retrieve class names from SharedPreferences
-        List<String> classNames = getClassNamesFromSharedPreferences();
+        List<String> classNames = getClassNamesFromSharedPreferences(courseName);
 
         // Generate and display barcode for each class name
         if (classNames != null && !classNames.isEmpty()) {
@@ -76,10 +76,10 @@ public class BarcodeGenerator extends AppCompatActivity {
         }
     }
 
-    private List<String> getClassNamesFromSharedPreferences() {
+    private List<String> getClassNamesFromSharedPreferences(String courseName) {
         // Retrieve class names from SharedPreferences, modify as per your implementation
         SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        Set<String> classNamesSet = sharedPreferences.getStringSet("student_names_", null);
+        Set<String> classNamesSet = sharedPreferences.getStringSet(courseName +"_student_names", null);
         if (classNamesSet != null) {
             return new ArrayList<>(classNamesSet);
         }
