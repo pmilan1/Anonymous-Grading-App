@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,8 +18,9 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class ScanActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button scanButton, examsButton;
+    private Button scanButton, gradeSubmit;
     private TextView barcodeId;
+    private EditText grade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +28,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_scan);
 
         scanButton = findViewById(R.id.scanButton);
-        examsButton = findViewById(R.id.examsButton);
         barcodeId = findViewById(R.id.barcodeIdtextView);
+        gradeSubmit = findViewById(R.id.gradeButton);
+        grade = findViewById(R.id.gradeEditText);
 
         scanButton.setOnClickListener(this);   // add listener to button
     }
@@ -45,6 +48,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
             Intent i = new Intent(getApplicationContext(), ExamActivity.class);
             startActivity(i);
         }
+        else if (v.getId() == R.id.gradeButton) {
+            // add grade to database
+        }
     }
 
     @Override
@@ -59,6 +65,8 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
             }
             else {
                 barcodeId.setText(intentResult.getContents());
+                grade.setVisibility(View.VISIBLE);
+                gradeSubmit.setVisibility(View.VISIBLE);
             }
         }
         else {

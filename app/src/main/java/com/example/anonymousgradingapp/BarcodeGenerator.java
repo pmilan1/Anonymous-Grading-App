@@ -35,8 +35,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-/* This file is exclusively for testing purposes. DELETE once fully implemented */
-
 public class BarcodeGenerator extends AppCompatActivity {
 
     private TableLayout tableLayout;
@@ -51,7 +49,6 @@ public class BarcodeGenerator extends AppCompatActivity {
 
         courseName = getIntent().getStringExtra("courseName");
         Log.d("BARCODE", courseName);
-
 
         // Retrieve class names from SharedPreferences
         List<String> classNames = getClassNamesFromSharedPreferences(courseName);
