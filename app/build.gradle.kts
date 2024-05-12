@@ -41,13 +41,12 @@ dependencies {
     implementation("androidx.activity:activity:1.8.2")
 
     // added dependencies (by user)
-    implementation("com.amplifyframework:core:1.4.0")
-    implementation("com.amplifyframework:aws-auth-cognito:1.4.0")
-    implementation("com.amplifyframework:aws-api:2.14.11")
-    implementation("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.6.0")
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.10")
+    implementation("com.amplifyframework:core:2.16.1")
+    implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
+    implementation("com.amplifyframework:aws-api:2.16.0")
+    implementation("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.24.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
-    implementation("com.google.mlkit:barcode-scanning:17.2.0")
     implementation("com.journeyapps:zxing-android-embedded:4.1.0")
     implementation("com.google.zxing:core:3.4.0")
 

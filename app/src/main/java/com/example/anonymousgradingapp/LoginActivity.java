@@ -39,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
                         result -> Log.i("AmplifyRegister", "Result: " + result.toString()),
                         error -> Log.e("AmplifyRegister", "Error: " + error.toString())
                 );
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
             }
         });
 
