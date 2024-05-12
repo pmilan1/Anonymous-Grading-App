@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
                         result -> Log.i("AmplifyRegister", "Result: " + result.toString()),
                         error -> Log.e("AmplifyRegister", "Error: " + error.toString())
                 );
+                // add logic to login only if successful
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
             }
