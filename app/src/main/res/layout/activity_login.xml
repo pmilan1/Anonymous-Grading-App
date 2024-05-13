@@ -26,7 +26,7 @@
         android:layout_width="270dp"
         android:layout_height="50dp"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="textPassword"
         android:hint="Password"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -61,18 +61,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.65" />
 
-    <Button
-        android:id="@+id/forgotButton"
-        android:layout_width="289dp"
-        android:layout_height="45dp"
-        android:text="Forgot Password?"
-        android:backgroundTint="@color/design_default_color_on_secondary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.927" />
-
     <ImageView
         android:id="@+id/logoViewMain"
         android:layout_width="409dp"
@@ -83,17 +71,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.086"
         app:srcCompat="@drawable/logo_transparent_cropped" />
-
-    <Button
-        android:id="@+id/bypassButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bypass"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.862"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.579" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
