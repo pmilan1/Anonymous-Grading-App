@@ -36,14 +36,14 @@ android {
 dependencies {
 
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.activity:activity:1.8.2")
+    implementation("androidx.activity:activity:1.9.0")
 
     // added dependencies (by user)
     implementation("com.amplifyframework:core:2.16.1")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
-    implementation("com.amplifyframework:aws-api:2.16.0")
+    implementation("com.amplifyframework:aws-api:2.16.1")
     implementation("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.24.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
