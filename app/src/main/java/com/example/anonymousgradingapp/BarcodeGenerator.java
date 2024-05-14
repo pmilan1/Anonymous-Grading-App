@@ -4,6 +4,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +42,9 @@ public class BarcodeGenerator extends AppCompatActivity {
 
     private TableLayout tableLayout;
     private String courseName;
+    private HandlerThread handlerThread;
+    private Handler backgroundHandler;
+    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,12 @@ public class BarcodeGenerator extends AppCompatActivity {
 
         courseName = getIntent().getStringExtra("courseName");
         Log.d("BARCODE", courseName);
+
+        // initialize handler thread
+        handlerThread = new HandlerThread("BarcodeGeneratorThread");
+        handlerThread.start();
+        backgroundHandler = new Handler(handlerThread.getLooper());
+        mainHandler = new Handler(Looper.getMainLooper());
 
         // Retrieve class names from SharedPreferences
         List<String> classNames = getClassNamesFromSharedPreferences(courseName);
@@ -67,14 +79,23 @@ public class BarcodeGenerator extends AppCompatActivity {
                 // Generate and display barcode image
                 String randomNum = Integer.toString(generateRandomNumber());
                 ImageView barcodeImageView = new ImageView(this);
-                Bitmap barcodeBitmap = generateBarcode(randomNum);
-                barcodeImageView.setImageBitmap(barcodeBitmap);
                 barcodeImageView.setPadding(6,8,6,8);
                 tableRow.addView(barcodeImageView);
 
                 tableLayout.addView(tableRow);
+
+                backgroundHandler.post(() -> {
+                    Bitmap barcodeBitmap = generateBarcode(randomNum);
+                    mainHandler.post(() -> barcodeImageView.setImageBitmap(barcodeBitmap));
+                });
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handlerThread.quitSafely();
     }
 
     private List<String> getClassNamesFromSharedPreferences(String courseName) {

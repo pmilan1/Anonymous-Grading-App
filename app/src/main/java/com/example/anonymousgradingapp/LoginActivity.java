@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText username, password;
     private Button signupButton, loginButton;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.passwordText);
         signupButton = (Button) findViewById(R.id.registerButton);
         loginButton = (Button) findViewById(R.id.loginButton);
+
+        handler = new Handler(Looper.getMainLooper());
 
         Amplify.Auth.signOut(
                 signOutResult -> {
@@ -54,26 +58,25 @@ public class LoginActivity extends AppCompatActivity {
                                     authSessionResult -> {
                                         Log.i("AmplifyRegister", "Result: " + authSessionResult.toString());
 
-                                        if (authSessionResult.isSignedIn()) {
-                                            Looper.prepare();
-                                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                                            startActivity(i);
-                                        }
-                                        else {
-                                            Toast.makeText(LoginActivity.this, "Incorrect Login", Toast.LENGTH_SHORT).show();
-                                        }
+                                        handler.post(() -> {
+                                            if (authSessionResult.isSignedIn()) {
+                                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                                startActivity(i);
+                                            } else {
+                                                Toast.makeText(LoginActivity.this, "Incorrect Login", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     },
                                     authSessionError -> {
                                         Log.e("AmplifyRegister", "Error " + authSessionError.toString());
-                                        Toast.makeText(getApplicationContext(), "Error: " + authSessionError.toString(), Toast.LENGTH_SHORT).show();
+                                        handler.post(() -> Toast.makeText(getApplicationContext(), "Error: " + authSessionError.toString(), Toast.LENGTH_SHORT).show());
                                     }
                             );
                         },
                         error -> {
                             Log.e("AmplifyRegister", "Error: " + error.toString());
-                            Looper.prepare();
-                            Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                            handler.post(() -> Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show());
                         });
             }
         });
