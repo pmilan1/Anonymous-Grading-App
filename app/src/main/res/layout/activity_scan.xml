@@ -8,15 +8,15 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar2"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="-1dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="-1dp" />
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="146dp"
