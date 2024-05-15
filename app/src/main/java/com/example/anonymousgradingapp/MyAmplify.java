@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
@@ -15,10 +16,11 @@ public class MyAmplify extends Application {
 
         try {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
+            Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
             Log.i("AmplifyRegister", "Initialized Amplify");
         }
-        catch (Exception e) {
+        catch (AmplifyException e) {
             e.printStackTrace();
             Log.e("AmplifyRegister", "Could not initialize Amplify", e);
         }

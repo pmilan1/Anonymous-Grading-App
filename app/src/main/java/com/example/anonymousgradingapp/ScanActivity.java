@@ -5,14 +5,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Exams;
+import com.amplifyframework.datastore.generated.model.Grade;
+import com.amplifyframework.datastore.generated.model.Roster;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.List;
 
 /* Used documentation from GeeksForGeeks and ZXing GitHub to implement barcode scanning API */
 
@@ -71,6 +80,24 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+    private void addGrade(int barcodeID, int score){
+        List<Roster> roster = MainActivity.course.getRoster();
+        for (Roster r : roster) {
+            List<Exams> exams = r.getExams();
+            for (Exams e : exams) {
+                if(e.getBarcode() == barcodeID){
+                    Grade grade = Grade.builder()
+                            .examGrade(score)
+                            .exams(e)
+                            .build();
+                    Amplify.API.mutate(ModelMutation.create(grade),
+                            response -> Log.i("GraphQL", "Grade with id: " + response.getData().getId()),
+                            error -> Log.e("GraphQL", "Grade Create failed", error)
+                    );
+                }
+            }
         }
     }
 }

@@ -9,6 +9,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.amplifyframework.datastore.generated.model.Course;
+import com.amplifyframework.datastore.generated.model.Roster;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,8 +31,15 @@ public class RosterActivity extends AppCompatActivity {
     }
 
     private void loadRoster(String courseName) {
-        List<String> studentNames = getListFromSharedPreferences(courseName + "_student_names");
-        List<String> studentIds = getListFromSharedPreferences(courseName + "_student_ids");
+        List<Roster> students = MainActivity.course.getRoster();
+//        List<String> studentNames = getListFromSharedPreferences(courseName + "_student_names");
+//        List<String> studentIds = getListFromSharedPreferences(courseName + "_student_ids");
+        List<String> studentNames = new ArrayList<>();
+        List<String> studentIds = new ArrayList<>();
+        for (Roster r : students){
+            studentNames.add(r.getStudentName());
+            studentIds.add(r.getStudentId());
+        }
 
         if (studentNames != null && studentIds != null && studentNames.size() == studentIds.size()) {
             TableLayout tableLayout = findViewById(R.id.tableLayout);
@@ -55,13 +65,13 @@ public class RosterActivity extends AppCompatActivity {
         }
     }
 
-    private List<String> getListFromSharedPreferences(String key) {
-        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        Set<String> set = sharedPreferences.getStringSet(key, null);
-
-        if (set != null) {
-            return new ArrayList<>(set);
-        }
-        return null;
-    }
+//    private List<String> getListFromSharedPreferences(String key) {
+//        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
+//        Set<String> set = sharedPreferences.getStringSet(key, null);
+//
+//        if (set != null) {
+//            return new ArrayList<>(set);
+//        }
+//        return null;
+//    }
 }

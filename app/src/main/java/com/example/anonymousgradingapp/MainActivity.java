@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Course;
+import com.amplifyframework.datastore.generated.model.Instructor;
+import com.amplifyframework.datastore.generated.model.Roster;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,14 +56,16 @@ public class MainActivity extends AppCompatActivity {
     private EditText courseName;
     private Spinner spinnerCourses;
 
-    private SharedPreferences sharedPreferences;
+    public static Course course;
+
+//    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 
         coursesList = new ArrayList<>();
         rosterList = new ArrayList<>();
@@ -83,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                     coursesList.add(courseName_);
                     adapter.notifyDataSetChanged();
                     courseName.setText("");
-                    saveCoursesToSharedPreferences();
+                    addCourse(courseName_);
+//                    saveCoursesToSharedPreferences();
                 }
             }
         });
@@ -94,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        loadCoursesFromSharedPreferences();
+//        loadCoursesFromSharedPreferences();
 
         rosterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         openFile();
                         spinnerSelection = parent.getItemAtPosition(position).toString();
-                        saveRosterListToSharedPreferences(spinnerSelection);
+//                        saveRosterListToSharedPreferences(spinnerSelection);
                     }
                 });
-                loadRosterFromSharedPreferences(parent.getItemAtPosition(position).toString()); // load roster from selected course
+//                loadRosterFromSharedPreferences(parent.getItemAtPosition(position).toString()); // load roster from selected course
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -126,29 +137,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void saveCoursesToSharedPreferences() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Set<String> set = new HashSet<>(coursesList);
-        editor.putStringSet(COURSES_KEY, set);
-        editor.apply();
-    }
+//    private void saveCoursesToSharedPreferences() {
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        Set<String> set = new HashSet<>(coursesList);
+//        editor.putStringSet(COURSES_KEY, set);
+//        editor.apply();
+//    }
 
-    private void loadCoursesFromSharedPreferences() {
-        Set<String> set = sharedPreferences.getStringSet(COURSES_KEY, null);
-
-        if (set != null) {
-            coursesList.addAll(set);
-            adapter.notifyDataSetChanged();
-        }
-    }
-    private void saveRosterListToSharedPreferences(String name){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Set<String> set = new HashSet<>(rosterList);
-        editor.putStringSet(name, set);
-        editor.apply();
-        //Adds a new list to SharedPreferences with the course name
-        rosterList.clear();
-    }
+//    private void loadCoursesFromSharedPreferences() {
+//        Set<String> set = sharedPreferences.getStringSet(COURSES_KEY, null);
+//
+//        if (set != null) {
+//            coursesList.addAll(set);
+//            adapter.notifyDataSetChanged();
+//        }
+//    }
+//    private void saveRosterListToSharedPreferences(String name){
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        Set<String> set = new HashSet<>(rosterList);
+//        editor.putStringSet(name, set);
+//        editor.apply();
+//        //Adds a new list to SharedPreferences with the course name
+//        rosterList.clear();
+//    }
     //Stuff for storage permission
     private static final int STORAGE_PERMISSION_CODE = 23;
     public boolean checkStoragePermissions(){
@@ -238,15 +249,18 @@ public class MainActivity extends AppCompatActivity {
 
             if (inputStream != null) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder stringBuilder = new StringBuilder();
+//                StringBuilder stringBuilder = new StringBuilder();
                 String line;
 
                 while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line).append("\n");
+//                    stringBuilder.append(line).append("\n");
+                    String[] temp;
+                    temp = line.split(",");
+                    addRoster(temp[0], temp[1]);
                 }
                 inputStream.close();
 
-                saveToSharedPreferences(stringBuilder.toString(), spinnerSelection);
+                //saveToSharedPreferences(stringBuilder.toString(), spinnerSelection);
             }
             else {
                 Toast.makeText(this, "Unable to open CSV file", Toast.LENGTH_SHORT).show();
@@ -257,49 +271,72 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void saveToSharedPreferences(String csvContent, String courseName) {
-        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        String[] lines = csvContent.split("\n");
-
-        // Initialize lists to store student names and IDs
-        List<String> studentNames = new ArrayList<>();
-        List<String> studentIDs = new ArrayList<>();
-
-        // Parse each line to extract student names and IDs
-        for (String line : lines) {
-            String[] parts = line.split(",");   // assuming comma-separation in CSV
-
-            if (parts.length >= 2) {
-                studentNames.add(parts[0].trim());
-                studentIDs.add(parts[1].trim());
-            }
-        }
-
-        // save student names and ids to SharedPreferences
-        saveListToSharedPreferences(courseName + "_student_names", studentNames);
-        saveListToSharedPreferences(courseName + "_student_ids", studentIDs);
-
-        Toast.makeText(this, "CSV content saved to SharedPreferences", Toast.LENGTH_SHORT).show();
+    private void addCourse(String courseName){
+        course = Course.builder()
+                .coursename(courseName)
+                .instructor(LoginActivity.instructor)
+                .build();
+        Amplify.API.mutate(ModelMutation.create(course),
+                response -> Log.i("GraphQL", "Course with id: " + response.getData().getId()),
+                error -> Log.e("GraphQL", "Course Create failed", error)
+        );
+    }
+    private void addRoster(String studentName, String studentID){
+        Roster roster = Roster.builder()
+                .studentName(studentName)
+                .studentId(studentID)
+                .course(course)
+                .build();
+        Amplify.API.mutate(ModelMutation.create(roster),
+                response -> Log.i("GraphQL", "Roster - Student with id: " + response.getData().getId()),
+                error -> Log.e("GraphQL", "Roster Create failed", error)
+        );
     }
 
-    private void saveListToSharedPreferences(String key, List<String> list) {
-        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        Set<String> set = new HashSet<>(list);
-        editor.putStringSet(key, set);
-        editor.apply();
-    }
+//    private void saveToSharedPreferences(String csvContent, String courseName) {
+//        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//        String[] lines = csvContent.split("\n");
+//
+//        // Initialize lists to store student names and IDs
+//        List<String> studentNames = new ArrayList<>();
+//        List<String> studentIDs = new ArrayList<>();
+//
+//        // Parse each line to extract student names and IDs
+//        for (String line : lines) {
+//            String[] parts = line.split(",");   // assuming comma-separation in CSV
+//
+//            if (parts.length >= 2) {
+//                studentNames.add(parts[0].trim());
+//                studentIDs.add(parts[1].trim());
+//            }
+//        }
+//
+//        // save student names and ids to SharedPreferences
+//        saveListToSharedPreferences(courseName + "_student_names", studentNames);
+//        saveListToSharedPreferences(courseName + "_student_ids", studentIDs);
+//
+//        Toast.makeText(this, "CSV content saved to SharedPreferences", Toast.LENGTH_SHORT).show();
+//    }
 
-    private void loadRosterFromSharedPreferences(String courseName) {
-        SharedPreferences sharedPreferences1 = getSharedPreferences("RosterPref", MODE_PRIVATE);
-        Set<String> set = sharedPreferences1.getStringSet(courseName, null);
+//    private void saveListToSharedPreferences(String key, List<String> list) {
+//        SharedPreferences sharedPreferences = getSharedPreferences("RosterPref", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//        Set<String> set = new HashSet<>(list);
+//        editor.putStringSet(key, set);
+//        editor.apply();
+//    }
 
-        if (set != null) {
-            rosterList.clear();     // clear existing roster
-            rosterList.addAll(set); // load roster for selected course
-        }
-    }
+//    private void loadRosterFromSharedPreferences(String courseName) {
+//        SharedPreferences sharedPreferences1 = getSharedPreferences("RosterPref", MODE_PRIVATE);
+//        Set<String> set = sharedPreferences1.getStringSet(courseName, null);
+//
+//        if (set != null) {
+//            rosterList.clear();     // clear existing roster
+//            rosterList.addAll(set); // load roster for selected course
+//        }
+//    }
 }

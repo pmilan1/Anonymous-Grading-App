@@ -12,14 +12,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Instructor;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText username, password;
     private Button signupButton, loginButton;
     private Handler handler;
+    public static Instructor instructor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,11 @@ public class LoginActivity extends AppCompatActivity {
                                         handler.post(() -> {
                                             if (authSessionResult.isSignedIn()) {
                                                 Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                                if(getInstructor(username.getText().toString()) == null){
+                                                    setInstructor(username.getText().toString());
+                                                }
                                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
+//                                                i.putExtra("username", username.getText().toString());
                                                 startActivity(i);
                                             } else {
                                                 Toast.makeText(LoginActivity.this, "Incorrect Login", Toast.LENGTH_SHORT).show();
@@ -88,5 +95,25 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+    }
+    private String getInstructor(String username) {
+        String result = null;
+        try{
+            result = instructor.getUsername();
+        }catch(Exception ignored){
+
+        }
+        return result;
+    }
+    private void setInstructor(String username) {
+        instructor = Instructor.builder()
+                .username(username)
+                .build();
+        Amplify.API.mutate(
+                ModelMutation.create(instructor),
+                response -> Log.i("GraphQL", "Instructor with id: " + response.getData().getId()),
+                error -> Log.e("GraphQL", "Instructor Create failed", error)
+        );
     }
 }

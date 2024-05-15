@@ -16,7 +16,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.amplifyframework.datastore.generated.model.Exams;
+import com.amplifyframework.datastore.generated.model.Roster;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -28,7 +32,7 @@ public class BarcodeActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private Button buttonExams, buttonScan, generateBarcodeBtn;
     private Spinner spinnerExams;
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
     private String spinnerSelection;
     private String courseName;
     @Override
@@ -41,12 +45,12 @@ public class BarcodeActivity extends AppCompatActivity {
         buttonExams = (Button) findViewById(R.id.examsButton);
         generateBarcodeBtn = (Button) findViewById(R.id.generateBarcodeBtn);
 
-        sharedPreferences = getSharedPreferences(MainActivity.PREF_NAME, MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences(MainActivity.PREF_NAME, MODE_PRIVATE);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
 
         spinnerExams.setAdapter(adapter);
 
-        loadExamsToSpinner();
+//        loadExamsToSpinner();
 
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,8 +110,13 @@ public class BarcodeActivity extends AppCompatActivity {
     }
 
     private void loadExamsToSpinner() {
-        Set<String> set = sharedPreferences.getStringSet(ExamActivity.EXAM_KEY, null);
-
+//        Set<String> set = sharedPreferences.getStringSet(ExamActivity.EXAM_KEY, null);
+        Set<String> set = new HashSet<>();
+        List<Roster> temp = MainActivity.course.getRoster();
+        List<Exams> exams = temp.get(0).getExams();
+        for (Exams exam : exams) {
+            set.add(exam.getExamName());
+        }
         if (set != null) {
             List<String> examsList = new ArrayList<>(set);
             adapter.addAll(examsList);
