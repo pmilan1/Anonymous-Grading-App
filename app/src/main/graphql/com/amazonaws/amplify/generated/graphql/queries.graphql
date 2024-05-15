@@ -1,0 +1,230 @@
+# this is an auto generated file. This will be overwritten
+
+query GetInstructor($id: ID!) {
+  getInstructor(id: $id) {
+    id
+    username
+    courses {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+query ListInstructors(
+  $filter: ModelInstructorFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listInstructors(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      username
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query GetCourse($id: ID!) {
+  getCourse(id: $id) {
+    id
+    coursename
+    instructor {
+      id
+      username
+      createdAt
+      updatedAt
+      __typename
+    }
+    roster {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    instructorCoursesId
+    __typename
+  }
+}
+
+query ListCourses(
+  $filter: ModelCourseFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCourses(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      coursename
+      createdAt
+      updatedAt
+      instructorCoursesId
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query GetRoster($id: ID!) {
+  getRoster(id: $id) {
+    id
+    course {
+      id
+      coursename
+      createdAt
+      updatedAt
+      instructorCoursesId
+      __typename
+    }
+    studentName
+    studentID
+    exams {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    courseRosterId
+    __typename
+  }
+}
+
+query ListRosters(
+  $filter: ModelRosterFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listRosters(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      studentName
+      studentID
+      createdAt
+      updatedAt
+      courseRosterId
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query GetExams($id: ID!) {
+  getExams(id: $id) {
+    id
+    roster {
+      id
+      studentName
+      studentID
+      createdAt
+      updatedAt
+      courseRosterId
+      __typename
+    }
+    barcode
+    examName
+    grade {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    rosterExamsId
+    __typename
+  }
+}
+
+query ListExams(
+  $filter: ModelExamsFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listExams(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      barcode
+      examName
+      createdAt
+      updatedAt
+      rosterExamsId
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query GetGrade($id: ID!) {
+  getGrade(id: $id) {
+    id
+    exams {
+      id
+      barcode
+      examName
+      createdAt
+      updatedAt
+      rosterExamsId
+      __typename
+    }
+    examGrade
+    createdAt
+    updatedAt
+    examsGradeId
+    __typename
+  }
+}
+
+query ListGrades(
+  $filter: ModelGradeFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listGrades(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      examGrade
+      createdAt
+      updatedAt
+      examsGradeId
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query ExamsByBarcode(
+  $barcode: Int!
+  $sortDirection: ModelSortDirection
+  $filter: ModelExamsFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  examsByBarcode(
+    barcode: $barcode
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      barcode
+      examName
+      createdAt
+      updatedAt
+      rosterExamsId
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}

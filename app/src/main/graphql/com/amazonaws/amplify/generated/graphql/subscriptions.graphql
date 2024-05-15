@@ -1,0 +1,322 @@
+# this is an auto generated file. This will be overwritten
+
+subscription OnCreateInstructor(
+  $filter: ModelSubscriptionInstructorFilterInput
+) {
+  onCreateInstructor(filter: $filter) {
+    id
+    username
+    courses {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateInstructor(
+  $filter: ModelSubscriptionInstructorFilterInput
+) {
+  onUpdateInstructor(filter: $filter) {
+    id
+    username
+    courses {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeleteInstructor(
+  $filter: ModelSubscriptionInstructorFilterInput
+) {
+  onDeleteInstructor(filter: $filter) {
+    id
+    username
+    courses {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateCourse($filter: ModelSubscriptionCourseFilterInput) {
+  onCreateCourse(filter: $filter) {
+    id
+    coursename
+    instructor {
+      id
+      username
+      createdAt
+      updatedAt
+      __typename
+    }
+    roster {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    instructorCoursesId
+    __typename
+  }
+}
+
+subscription OnUpdateCourse($filter: ModelSubscriptionCourseFilterInput) {
+  onUpdateCourse(filter: $filter) {
+    id
+    coursename
+    instructor {
+      id
+      username
+      createdAt
+      updatedAt
+      __typename
+    }
+    roster {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    instructorCoursesId
+    __typename
+  }
+}
+
+subscription OnDeleteCourse($filter: ModelSubscriptionCourseFilterInput) {
+  onDeleteCourse(filter: $filter) {
+    id
+    coursename
+    instructor {
+      id
+      username
+      createdAt
+      updatedAt
+      __typename
+    }
+    roster {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    instructorCoursesId
+    __typename
+  }
+}
+
+subscription OnCreateRoster($filter: ModelSubscriptionRosterFilterInput) {
+  onCreateRoster(filter: $filter) {
+    id
+    course {
+      id
+      coursename
+      createdAt
+      updatedAt
+      instructorCoursesId
+      __typename
+    }
+    studentName
+    studentID
+    exams {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    courseRosterId
+    __typename
+  }
+}
+
+subscription OnUpdateRoster($filter: ModelSubscriptionRosterFilterInput) {
+  onUpdateRoster(filter: $filter) {
+    id
+    course {
+      id
+      coursename
+      createdAt
+      updatedAt
+      instructorCoursesId
+      __typename
+    }
+    studentName
+    studentID
+    exams {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    courseRosterId
+    __typename
+  }
+}
+
+subscription OnDeleteRoster($filter: ModelSubscriptionRosterFilterInput) {
+  onDeleteRoster(filter: $filter) {
+    id
+    course {
+      id
+      coursename
+      createdAt
+      updatedAt
+      instructorCoursesId
+      __typename
+    }
+    studentName
+    studentID
+    exams {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    courseRosterId
+    __typename
+  }
+}
+
+subscription OnCreateExams($filter: ModelSubscriptionExamsFilterInput) {
+  onCreateExams(filter: $filter) {
+    id
+    roster {
+      id
+      studentName
+      studentID
+      createdAt
+      updatedAt
+      courseRosterId
+      __typename
+    }
+    barcode
+    examName
+    grade {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    rosterExamsId
+    __typename
+  }
+}
+
+subscription OnUpdateExams($filter: ModelSubscriptionExamsFilterInput) {
+  onUpdateExams(filter: $filter) {
+    id
+    roster {
+      id
+      studentName
+      studentID
+      createdAt
+      updatedAt
+      courseRosterId
+      __typename
+    }
+    barcode
+    examName
+    grade {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    rosterExamsId
+    __typename
+  }
+}
+
+subscription OnDeleteExams($filter: ModelSubscriptionExamsFilterInput) {
+  onDeleteExams(filter: $filter) {
+    id
+    roster {
+      id
+      studentName
+      studentID
+      createdAt
+      updatedAt
+      courseRosterId
+      __typename
+    }
+    barcode
+    examName
+    grade {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    rosterExamsId
+    __typename
+  }
+}
+
+subscription OnCreateGrade($filter: ModelSubscriptionGradeFilterInput) {
+  onCreateGrade(filter: $filter) {
+    id
+    exams {
+      id
+      barcode
+      examName
+      createdAt
+      updatedAt
+      rosterExamsId
+      __typename
+    }
+    examGrade
+    createdAt
+    updatedAt
+    examsGradeId
+    __typename
+  }
+}
+
+subscription OnUpdateGrade($filter: ModelSubscriptionGradeFilterInput) {
+  onUpdateGrade(filter: $filter) {
+    id
+    exams {
+      id
+      barcode
+      examName
+      createdAt
+      updatedAt
+      rosterExamsId
+      __typename
+    }
+    examGrade
+    createdAt
+    updatedAt
+    examsGradeId
+    __typename
+  }
+}
+
+subscription OnDeleteGrade($filter: ModelSubscriptionGradeFilterInput) {
+  onDeleteGrade(filter: $filter) {
+    id
+    exams {
+      id
+      barcode
+      examName
+      createdAt
+      updatedAt
+      rosterExamsId
+      __typename
+    }
+    examGrade
+    createdAt
+    updatedAt
+    examsGradeId
+    __typename
+  }
+}

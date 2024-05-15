@@ -1,0 +1,361 @@
+# this is an auto generated file. This will be overwritten
+
+mutation CreateInstructor(
+  $input: CreateInstructorInput!
+  $condition: ModelInstructorConditionInput
+) {
+  createInstructor(input: $input, condition: $condition) {
+    id
+    username
+    courses {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+mutation UpdateInstructor(
+  $input: UpdateInstructorInput!
+  $condition: ModelInstructorConditionInput
+) {
+  updateInstructor(input: $input, condition: $condition) {
+    id
+    username
+    courses {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+mutation DeleteInstructor(
+  $input: DeleteInstructorInput!
+  $condition: ModelInstructorConditionInput
+) {
+  deleteInstructor(input: $input, condition: $condition) {
+    id
+    username
+    courses {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+mutation CreateCourse(
+  $input: CreateCourseInput!
+  $condition: ModelCourseConditionInput
+) {
+  createCourse(input: $input, condition: $condition) {
+    id
+    coursename
+    instructor {
+      id
+      username
+      createdAt
+      updatedAt
+      __typename
+    }
+    roster {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    instructorCoursesId
+    __typename
+  }
+}
+
+mutation UpdateCourse(
+  $input: UpdateCourseInput!
+  $condition: ModelCourseConditionInput
+) {
+  updateCourse(input: $input, condition: $condition) {
+    id
+    coursename
+    instructor {
+      id
+      username
+      createdAt
+      updatedAt
+      __typename
+    }
+    roster {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    instructorCoursesId
+    __typename
+  }
+}
+
+mutation DeleteCourse(
+  $input: DeleteCourseInput!
+  $condition: ModelCourseConditionInput
+) {
+  deleteCourse(input: $input, condition: $condition) {
+    id
+    coursename
+    instructor {
+      id
+      username
+      createdAt
+      updatedAt
+      __typename
+    }
+    roster {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    instructorCoursesId
+    __typename
+  }
+}
+
+mutation CreateRoster(
+  $input: CreateRosterInput!
+  $condition: ModelRosterConditionInput
+) {
+  createRoster(input: $input, condition: $condition) {
+    id
+    course {
+      id
+      coursename
+      createdAt
+      updatedAt
+      instructorCoursesId
+      __typename
+    }
+    studentName
+    studentID
+    exams {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    courseRosterId
+    __typename
+  }
+}
+
+mutation UpdateRoster(
+  $input: UpdateRosterInput!
+  $condition: ModelRosterConditionInput
+) {
+  updateRoster(input: $input, condition: $condition) {
+    id
+    course {
+      id
+      coursename
+      createdAt
+      updatedAt
+      instructorCoursesId
+      __typename
+    }
+    studentName
+    studentID
+    exams {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    courseRosterId
+    __typename
+  }
+}
+
+mutation DeleteRoster(
+  $input: DeleteRosterInput!
+  $condition: ModelRosterConditionInput
+) {
+  deleteRoster(input: $input, condition: $condition) {
+    id
+    course {
+      id
+      coursename
+      createdAt
+      updatedAt
+      instructorCoursesId
+      __typename
+    }
+    studentName
+    studentID
+    exams {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    courseRosterId
+    __typename
+  }
+}
+
+mutation CreateExams(
+  $input: CreateExamsInput!
+  $condition: ModelExamsConditionInput
+) {
+  createExams(input: $input, condition: $condition) {
+    id
+    roster {
+      id
+      studentName
+      studentID
+      createdAt
+      updatedAt
+      courseRosterId
+      __typename
+    }
+    barcode
+    examName
+    grade {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    rosterExamsId
+    __typename
+  }
+}
+
+mutation UpdateExams(
+  $input: UpdateExamsInput!
+  $condition: ModelExamsConditionInput
+) {
+  updateExams(input: $input, condition: $condition) {
+    id
+    roster {
+      id
+      studentName
+      studentID
+      createdAt
+      updatedAt
+      courseRosterId
+      __typename
+    }
+    barcode
+    examName
+    grade {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    rosterExamsId
+    __typename
+  }
+}
+
+mutation DeleteExams(
+  $input: DeleteExamsInput!
+  $condition: ModelExamsConditionInput
+) {
+  deleteExams(input: $input, condition: $condition) {
+    id
+    roster {
+      id
+      studentName
+      studentID
+      createdAt
+      updatedAt
+      courseRosterId
+      __typename
+    }
+    barcode
+    examName
+    grade {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    rosterExamsId
+    __typename
+  }
+}
+
+mutation CreateGrade(
+  $input: CreateGradeInput!
+  $condition: ModelGradeConditionInput
+) {
+  createGrade(input: $input, condition: $condition) {
+    id
+    exams {
+      id
+      barcode
+      examName
+      createdAt
+      updatedAt
+      rosterExamsId
+      __typename
+    }
+    examGrade
+    createdAt
+    updatedAt
+    examsGradeId
+    __typename
+  }
+}
+
+mutation UpdateGrade(
+  $input: UpdateGradeInput!
+  $condition: ModelGradeConditionInput
+) {
+  updateGrade(input: $input, condition: $condition) {
+    id
+    exams {
+      id
+      barcode
+      examName
+      createdAt
+      updatedAt
+      rosterExamsId
+      __typename
+    }
+    examGrade
+    createdAt
+    updatedAt
+    examsGradeId
+    __typename
+  }
+}
+
+mutation DeleteGrade(
+  $input: DeleteGradeInput!
+  $condition: ModelGradeConditionInput
+) {
+  deleteGrade(input: $input, condition: $condition) {
+    id
+    exams {
+      id
+      barcode
+      examName
+      createdAt
+      updatedAt
+      rosterExamsId
+      __typename
+    }
+    examGrade
+    createdAt
+    updatedAt
+    examsGradeId
+    __typename
+  }
+}
