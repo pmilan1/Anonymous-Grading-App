@@ -68,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-
         coursesList = new ArrayList<>();
         rosterList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, coursesList);
 
         spinnerCourses = (Spinner) findViewById(R.id.courseSpinner);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new ArrayList<>());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         spinnerCourses.setAdapter(adapter);
 
         courseName = (EditText) findViewById(R.id.courseNameEditText);
@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
             requestForStoragePermissions();
         }
 
+        getCourses();
+
         addCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,9 +100,11 @@ public class MainActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     courseName.setText("");
                     addCourse(courseName_);
+                    getCourses();
                 }
             }
         });
+
         buttonExams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,6 +285,28 @@ public class MainActivity extends AppCompatActivity {
         Amplify.API.mutate(ModelMutation.create(roster),
                 response -> Log.i("GraphQL", "Roster - Student with id: " + response.getData().getId()),
                 error -> Log.e("GraphQL", "Roster Create failed", error)
+        );
+    }
+
+    private void getCourses() {
+        Amplify.API.query(
+                ModelQuery.list(Course.class),
+                response -> {
+                    if (response.hasData()) {
+                        List<String> courseNames = new ArrayList<>();
+                        for (Course course : response.getData()) {
+                            courseNames.add(course.getCoursename());
+                        }
+                        runOnUiThread(() -> {
+                            adapter.clear();
+                            adapter.addAll(courseNames);
+                            adapter.notifyDataSetChanged();
+                        });
+                    } else {
+                        Log.e("getCourses", "No data retreived");
+                    }
+                },
+                error -> Log.e("getCourses", "Query failed", error)
         );
     }
 }
