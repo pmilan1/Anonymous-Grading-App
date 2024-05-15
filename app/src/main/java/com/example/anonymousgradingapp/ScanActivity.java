@@ -27,7 +27,7 @@ import java.util.List;
 
 public class ScanActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button scanButton, gradeSubmit;
+    private Button scanButton, examsButton, gradeButton;
     private TextView barcodeId;
     private EditText grade;
 
@@ -38,10 +38,14 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
 
         scanButton = findViewById(R.id.scanButton);
         barcodeId = findViewById(R.id.barcodeIdtextView);
-        gradeSubmit = findViewById(R.id.gradeButton);
+        gradeButton = findViewById(R.id.gradeButton);
+        examsButton = findViewById(R.id.examsButton);
         grade = findViewById(R.id.gradeEditText);
 
-        scanButton.setOnClickListener(this);   // add listener to button
+        // allow buttons to be accessible
+        scanButton.setOnClickListener(this);
+        examsButton.setOnClickListener(this);
+        gradeButton.setOnClickListener(this);
     }
 
     @Override
@@ -75,7 +79,7 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
             else {
                 barcodeId.setText(intentResult.getContents());
                 grade.setVisibility(View.VISIBLE);
-                gradeSubmit.setVisibility(View.VISIBLE);
+                gradeButton.setVisibility(View.VISIBLE);
             }
         }
         else {

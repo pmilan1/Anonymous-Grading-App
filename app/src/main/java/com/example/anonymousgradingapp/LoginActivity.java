@@ -36,17 +36,25 @@ public class LoginActivity extends AppCompatActivity {
 
         handler = new Handler(Looper.getMainLooper());
 
-        Amplify.Auth.signOut(
-                signOutResult -> {
-                    if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
-                        Log.i("AmplifyRegister", "Sign out successful");
-                    }
-                    else {
-                        Log.e("AmplifyRegister", "Sign out failed");
-                    }
+        Amplify.Auth.fetchAuthSession(
+                authSessionResult -> {
+                    Log.i("AmplifyRegister", "Result: " + authSessionResult.toString());
+
+                    handler.post(() -> {
+                        if (authSessionResult.isSignedIn()) {
+                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(i);
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Incorrect Login", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                },
+                authSessionError -> {
+                    Log.e("AmplifyRegister", "Error " + authSessionError.toString());
+                    handler.post(() -> Toast.makeText(getApplicationContext(), "Error: " + authSessionError.toString(), Toast.LENGTH_SHORT).show());
                 }
         );
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,8 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
 //                                                i.putExtra("username", username.getText().toString());
                                                 startActivity(i);
-                                            } else {
-                                                Toast.makeText(LoginActivity.this, "Incorrect Login", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     },

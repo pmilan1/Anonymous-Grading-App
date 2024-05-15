@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,6 +31,9 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Course;
 import com.amplifyframework.datastore.generated.model.Instructor;
 import com.amplifyframework.datastore.generated.model.Roster;
+
+import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
+import com.amplifyframework.core.Amplify;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     public List<String> coursesList, rosterList;
     private String spinnerSelection;
     private ArrayAdapter<String> adapter;
-    private Button buttonExams, rosterBtn, addCourse, buttonUpload;
+    private Button buttonExams, rosterBtn, addCourse, buttonUpload, signOut;
     private EditText courseName;
     private Spinner spinnerCourses;
 
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         rosterBtn = (Button) findViewById(R.id.rosterBtn);
         buttonExams = (Button) findViewById(R.id.buttonExams);
         buttonUpload = (Button) findViewById(R.id.uploadButton);
+        signOut = (Button) findViewById(R.id.signOutButton);
 
         //Check for storage permission
         if(!checkStoragePermissions()) {
@@ -112,6 +115,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), RosterActivity.class);
                 i.putExtra("courseName", spinnerCourses.getSelectedItem().toString());
+                startActivity(i);
+            }
+        });
+
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Amplify.Auth.signOut(
+                        signOutResult -> {
+                            if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
+                                Log.i("AmplifyRegister", "Sign out successful");
+                            }
+                            else {
+                                Log.e("AmplifyRegister", "Sign out failed");
+                            }
+                        }
+                );
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
             }
         });
