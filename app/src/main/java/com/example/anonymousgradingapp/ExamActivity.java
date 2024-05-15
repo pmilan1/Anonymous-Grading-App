@@ -59,7 +59,7 @@ public class ExamActivity extends AppCompatActivity {
 
         courses.setAdapter(adapter);
 
-        loadCoursesIntoSpinner();   // load courses into spinner
+//        loadCoursesIntoSpinner();   // load courses into spinner
 
         buttonBarcodes.setOnClickListener(new View.OnClickListener() {
             @Override
